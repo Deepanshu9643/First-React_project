@@ -15,10 +15,10 @@ h1 {
 form {
   display: flex;
   justify-content: center;
-  flex-direction: column;  /* Stack items vertically */
-  gap: 10px;  /* Space between input and button */
+  flex-direction: column; 
+  gap: 10px; 
   margin-bottom: 20px;
-  align-items: center; /* Ensure input and button are aligned */
+  align-items: center; 
 }
 
 input, button {

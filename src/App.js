@@ -20,12 +20,12 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate Pincode
-    if (!/^\d{6}$/.test(pincode)) {
+    if (pincode.length !== 6 || isNaN(pincode)) {
       setError('Please enter a valid 6-digit Pincode.');
+      setPostOffices([]);
       return;
     }
-
+    
     setError('');
     setLoading(true);
     setPostOffices([]);
@@ -46,57 +46,63 @@ function App() {
     }
   };
 
-  // Filter post offices based on user input
   const filteredPostOffices = postOffices.filter((office) =>
     office.Name.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
     <div className="App">
-      <h1>Enter Pincode</h1>
-      
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          id="pincode-input"
-          value={pincode}
-          onChange={handlePincodeChange}
-          placeholder="Enter 6-digit Pincode"
-        />
-        <button type="submit">Lookup</button>
-      </form>
+  <h1>Enter Pincode</h1>
+  
+  <form onSubmit={handleSubmit}>
+    <input
+      type="text"
+      id="pincode-input"
+      value={pincode}
+      onChange={handlePincodeChange}
+      placeholder="Enter 6-digit Pincode"
+    />
+    <button type="submit">Lookup</button>
+  </form>
 
-      {error && <p id="error-message" style={{ color: 'red' }}>{error}</p>}
+  {error && <p id="error-message" style={{ color: 'red' }}>{error}</p>}
 
-      <div className="loader" style={{ display: loading ? 'block' : 'none' }}>
-        <div className="spinner"></div>
-      </div>
+  <div className="loader" style={{ display: loading ? 'block' : 'none' }}>
+    <div className="spinner"></div>
+  </div>
 
-      {postOffices.length > 0 && (
-        <>
-          <input
-            type="text"
-            value={filter}
-            onChange={handleFilterChange}
-            placeholder="Filter by Post Office Name"
-          />
-          <ul id="post-offices-list">
-            {filteredPostOffices.length > 0 ? (
-              filteredPostOffices.map((office, index) => (
-                <li key={index}>
-                  <strong>{office.Name}</strong><br />
-                  Pincode: {office.Pincode}<br />
-                  District: {office.District}<br />
-                  State: {office.State}
-                </li>
-              ))
-            ) : (
-              <li>Couldn’t find the postal data you’re looking for…</li>
-            )}
-          </ul>
-        </>
-      )}
+  {!loading && !error && pincode && (
+    <div id="pincode-details">
+      <p><strong>Pincode:</strong> {pincode}</p>
+      <p><strong>Message:</strong> Number of pincode(s) found: {postOffices.length}</p>
     </div>
+  )}
+
+  {postOffices.length > 0 && (
+    <>
+      <input
+        type="text"
+        value={filter}
+        onChange={handleFilterChange}
+        placeholder="Filter by Post Office Name"
+      />
+      <ul id="post-offices-list">
+        {filteredPostOffices.length > 0 ? (
+          filteredPostOffices.map((office, index) => (
+            <li key={index}>
+              <strong>{office.Name}</strong><br />
+              Pincode: {office.Pincode}<br />
+              District: {office.District}<br />
+              State: {office.State}
+            </li>
+          ))
+        ) : (
+          <li>Couldn’t find the postal data you’re looking for…</li>
+        )}
+      </ul>
+    </>
+  )}
+</div>
   );
 }
 
